@@ -1,7 +1,17 @@
-<?php include('connexion.php'); ?>
-<?php include('menu.php'); ?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminer une course</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <?php include('connexion.php'); ?>
+    <?php include('menu.php'); ?>
 
-<h2>Terminer une course</h2>
+<div class="container mt-5">
+    <h2>Terminer une course</h2>
 
 <?php if(isset($_GET['success'])): ?>
     <div class="alert alert-success alert-dismissible fade show">
@@ -22,20 +32,20 @@
             <option value="">-- Choisir une course en cours --</option>
             
             <?php
-            $sql = "SELECT c.*, ch.nom, ch.prenom 
+            $sql = "SELECT c.*, ch.nom, ch.prenoms 
                     FROM courses c 
-                    LEFT JOIN chauffeurs ch ON c.chauffeur_id = ch.id 
-                    WHERE c.statut = 'en_cours' 
+                    LEFT JOIN chauffeurs ch ON c.chauffeur_id = ch.chauffeur_id 
+                    WHERE c.statut = 'en cours' 
                     ORDER BY c.date_heure ASC";
             $resultat = mysqli_query($connexion, $sql);
             
             if(mysqli_num_rows($resultat) > 0):
                 while($course = mysqli_fetch_assoc($resultat)):
             ?>
-            <option value="<?= $course['id'] ?>">
-                #<?= $course['id'] ?> - <?= htmlspecialchars($course['depart']) ?> → 
-                <?= htmlspecialchars($course['arrivee']) ?> 
-                (Chauffeur: <?= $course['nom'] ? $course['prenom'].' '.$course['nom'] : 'Non assigné' ?>)
+            <option value="<?= $course['cource_id'] ?>">
+                #<?= $course['cource_id'] ?> - <?= htmlspecialchars($course['point_depart']) ?> → 
+                <?= htmlspecialchars($course['point_arrivee']) ?> 
+                (Chauffeur: <?= $course['nom'] ? $course['prenoms'].' '.$course['nom'] : 'Non assigné' ?>)
             </option>
             <?php 
                 endwhile;
@@ -66,10 +76,10 @@
     </thead>
     <tbody>
         <?php
-        $sql = "SELECT c.*, ch.nom, ch.prenom 
+        $sql = "SELECT c.*, ch.nom, ch.prenoms 
                 FROM courses c 
-                LEFT JOIN chauffeurs ch ON c.chauffeur_id = ch.id 
-                WHERE c.statut = 'en_cours' 
+                LEFT JOIN chauffeurs ch ON c.chauffeur_id = ch.chauffeur_id 
+                WHERE c.statut = 'en cours' 
                 ORDER BY c.date_heure ASC";
         $resultat = mysqli_query($connexion, $sql);
         
@@ -77,11 +87,11 @@
             while($course = mysqli_fetch_assoc($resultat)):
         ?>
         <tr>
-            <td><?= $course['id'] ?></td>
-            <td><?= htmlspecialchars($course['depart']) ?></td>
-            <td><?= htmlspecialchars($course['arrivee']) ?></td>
+            <td><?= $course['cource_id'] ?></td>
+            <td><?= htmlspecialchars($course['point_depart']) ?></td>
+            <td><?= htmlspecialchars($course['point_arrivee']) ?></td>
             <td><?= date('d/m/Y H:i', strtotime($course['date_heure'])) ?></td>
-            <td><?= $course['nom'] ? $course['prenom'].' '.$course['nom'] : 'Non assigné' ?></td>
+            <td><?= $course['nom'] ? $course['prenoms'].' '.$course['nom'] : 'Non assigné' ?></td>
             <td><span class="badge bg-success">en cours</span></td>
         </tr>
         <?php 
@@ -96,5 +106,6 @@
 </table>
 
     </div>
+    <script src="js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

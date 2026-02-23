@@ -1,7 +1,17 @@
 <?php include('connexion.php'); ?>
-<?php include('menu.php'); ?>
-
-<h2>Affecter un chauffeur à une course</h2>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affecter un chauffeur</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <?php include('menu.php'); ?>
+    
+    <div class="container mt-5">
+        <h2>Affecter un chauffeur à une course</h2>
 
 <!-- Affichage des messages de succès/erreur -->
 <?php if(isset($_GET['success'])): ?>
@@ -26,15 +36,15 @@
                 
                 <?php
                 // Récupérer uniquement les courses en attente
-                $sql_courses = "SELECT * FROM courses WHERE statut = 'en_attente' ORDER BY date_heure ASC";
+                $sql_courses = "SELECT * FROM courses WHERE statut = 'en attentte' ORDER BY date_heure ASC";
                 $resultat_courses = mysqli_query($connexion, $sql_courses);
                 
                 if(mysqli_num_rows($resultat_courses) > 0):
                     while($course = mysqli_fetch_assoc($resultat_courses)):
                 ?>
-                <option value="<?= $course['id'] ?>">
-                    <?= htmlspecialchars($course['depart']) ?> → 
-                    <?= htmlspecialchars($course['arrivee']) ?> 
+                <option value="<?= $course['cource_id'] ?>">
+                    <?= htmlspecialchars($course['point_depart']) ?> → 
+                    <?= htmlspecialchars($course['point_arrivee']) ?> 
                     (<?= date('d/m/Y H:i', strtotime($course['date_heure'])) ?>)
                 </option>
                 <?php 
@@ -55,13 +65,13 @@
                 
                 <?php
                 // Récupérer tous les chauffeurs
-                $sql_chauffeurs = "SELECT * FROM chauffeurs ORDER BY nom, prenom";
+                $sql_chauffeurs = "SELECT * FROM chauffeurs ORDER BY nom, prenoms";
                 $resultat_chauffeurs = mysqli_query($connexion, $sql_chauffeurs);
                 
                 while($chauffeur = mysqli_fetch_assoc($resultat_chauffeurs)):
                 ?>
                 <option value="<?= $chauffeur['id'] ?>">
-                    <?= htmlspecialchars($chauffeur['prenom'] . ' ' . $chauffeur['nom']) ?> 
+                    <?= htmlspecialchars($chauffeur['prenoms'] . ' ' . $chauffeur['nom']) ?> 
                     (📞 <?= htmlspecialchars($chauffeur['telephone']) ?>)
                 </option>
                 <?php endwhile; ?>
@@ -90,18 +100,18 @@
     <tbody>
         <?php
         // Réafficher les courses en attente
-        $sql = "SELECT * FROM courses WHERE statut = 'en_attente' ORDER BY date_heure ASC";
+        $sql = "SELECT * FROM courses WHERE statut = 'en attentte' ORDER BY date_heure ASC";
         $resultat = mysqli_query($connexion, $sql);
         
         if(mysqli_num_rows($resultat) > 0):
             while($course = mysqli_fetch_assoc($resultat)):
         ?>
         <tr>
-            <td><?= $course['id'] ?></td>
-            <td><?= htmlspecialchars($course['depart']) ?></td>
-            <td><?= htmlspecialchars($course['arrivee']) ?></td>
+            <td><?= $course['cource_id'] ?></td>
+            <td><?= htmlspecialchars($course['point_depart']) ?></td>
+            <td><?= htmlspecialchars($course['point_arrivee']) ?></td>
             <td><?= date('d/m/Y H:i', strtotime($course['date_heure'])) ?></td>
-            <td><span class="badge bg-warning">en attente</span></td>
+            <td><span class="badge bg-warning">en attentte</span></td>
         </tr>
         <?php 
             endwhile;
@@ -115,5 +125,6 @@
 </table>
 
     </div>
+    <script src="js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
